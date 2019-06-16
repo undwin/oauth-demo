@@ -49,7 +49,7 @@ public class Client  {
         return isSecretRequired;
     }
 
-    public void setSecretRequired(Boolean secretRequired) {
+    public void setIsSecretRequired(Boolean secretRequired) {
         isSecretRequired = secretRequired;
     }
 
@@ -65,7 +65,7 @@ public class Client  {
         return isScoped;
     }
 
-    public void setScoped(Boolean scoped) {
+    public void setIsScoped(Boolean scoped) {
         isScoped = scoped;
     }
 
@@ -105,7 +105,7 @@ public class Client  {
         return isAutoApprove;
     }
 
-    public void setAutoApprove(Boolean autoApprove) {
+    public void setIsAutoApprove(Boolean autoApprove) {
         isAutoApprove = autoApprove;
     }
 

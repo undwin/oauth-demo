@@ -7,7 +7,6 @@
 		<module>demo-client</module>
 		<module>demo-source</module>
 		<module>demo-oauth</module>
-        <module>demo-oauth2</module>
     </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>

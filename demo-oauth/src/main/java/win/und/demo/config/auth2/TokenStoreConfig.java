@@ -1,5 +1,6 @@
 package win.und.demo.config.auth2;
 
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,37 +10,34 @@ import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.security.oauth2.provider.token.store.*;
+import win.und.demo.datasources.DynamicDataSource;
+import win.und.demo.datasources.DynamicDataSourceConfig;
 import win.und.demo.oauth.support.BootSecurityProperties;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author yuit
- * @date  2018/10/17  16:38
- *
+ * @date 2018/10/17  16:38
+ * <p>
  * token 存储方式配置
- *
  **/
 @Configuration
 public class TokenStoreConfig {
 
     private BootSecurityProperties properties;
 
-
-
-
-//    private DataSource dataSource;
+    @Resource(name = "firstDataSource")
+    private DataSource dataSource;
 
     @Autowired(required = false)
     public TokenStoreConfig(BootSecurityProperties properties) {
         this.properties = properties;
-//        this.dataSource = dataSource;
     }
 
     @Bean
@@ -57,13 +55,12 @@ public class TokenStoreConfig {
 //                }
 //                store = new RedisTokenStore(factory);
                 break;
-//            case jdbc:
-//
-//                if(dataSource==null){
-//                    throw new BeanCreationException("配置jdbc存储Token需要dataSource bean，未找到");
-//                }
-//                store=new JdbcTokenStore(dataSource);
-//                break;
+            case jdbc:
+                if(dataSource == null){
+                    throw new BeanCreationException("配置DataSource存储Token需要redisConnectionFactory bean，未找到");
+                }
+                store = new JdbcTokenStore(dataSource);
+                break;
             default:
                 store = new InMemoryTokenStore();
         }

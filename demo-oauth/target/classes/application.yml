@@ -5,7 +5,7 @@ logging:
     org.springframework.security: DEBUG
 boot:
   oauth:
-    token-store-type: jwt
+    token-store-type: jdbc
     token-signing-key: 123123
 # Mybatis配置
 mybatis:
