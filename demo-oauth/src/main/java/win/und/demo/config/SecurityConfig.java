@@ -8,8 +8,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import win.und.demo.oauth.support.BootLoginFailureHandler;
 import win.und.demo.oauth.support.BootSecurityProperties;
 import win.und.demo.oauth.support.BootUserDetailService;
@@ -22,7 +26,33 @@ import win.und.demo.oauth.support.BootUserDetailService;
 @Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Configuration
+    @EnableResourceServer
+    protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
+        @Override
+        public void configure(ResourceServerSecurityConfigurer resources) {
+            resources.resourceId("order1").stateless(true);
+        }
+
+        @Override
+        public void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            http
+                    // Since we want the protected resources to be accessible in the UI as well we need
+                    // session creation to be allowed (it's disabled by default in 2.0.6)
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                    .and()
+                    .requestMatchers().anyRequest()
+                    .and()
+                    .anonymous()
+                    .and()
+                    .authorizeRequests()
+//                    .antMatchers("/product/**").access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
+                    .antMatchers("/order1/**").authenticated();//配置order访问控制，必须认证过后才可以访问
+            // @formatter:on
+        }
+    }
     private BootUserDetailService userDetailService;
 
 

@@ -1,6 +1,10 @@
 auth-server: http://localhost:8080 # 认证服务器地址
 server:
   port: 8085
+  servlet:
+    session:
+      cookie:
+        name: RESOURCE_SESSIONID
 logging:
   level:
     org.springframework.security: DEBUG
@@ -10,11 +14,12 @@ security:
 #      loginPath: /login   # 登录路径
     client:
       client-id: client
-      client-secret: secret
+      client-secret: 123qwe
       scope: admin
       state: 1
       access-token-uri: ${auth-server}/oauth/token
       user-authorization-uri: ${auth-server}/oauth/authorize
+
     resource:
       token-info-uri: ${auth-server}/oauth/check_token
 spring:

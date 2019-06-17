@@ -22,7 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 //允许访问首页
-                .antMatchers("/","/login","/error").permitAll()
+                .antMatchers("/","/login","/error","favicon.ico").permitAll()
                 .and()
                 // 设置登出URL为 /logout
                 .logout().logoutUrl("/logout").permitAll()
