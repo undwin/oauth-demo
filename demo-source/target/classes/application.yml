@@ -1,68 +1,27 @@
 server:
   port: 8086
+  servlet:
+    session:
+      cookie:
+        name: RESOURCE_SESSIONID
 logging:
   level:
     org.springframework.security: DEBUG
+oauth: #oauth2-server认证授权服务器的url配置，在获取AccessToken以及检测AccessToken中会用到
+  token: http://localhost:8080/auth/oauth/token
+  check_token: http://localhost:8080/auth/oauth/check_token #检查AccessToken有效性的url(认证授权服务器的url地址),获取 AccessToken 对象
 security:
   oauth2:
     client:
-      clientId: client
+      clientId:  client
       clientSecret: 123qwe
-      userAuthorizationUri: http://localhost:8080/oauth/authorize
+      userAuthorizationUri: http://localhost:8080/auth/oauth/authorize
       grant-type: authorization_code
       scope: admin
-      access-token-uri: http://localhost:8080/oauth/token
+      access-token-uri: http://localhost:8080/auth/oauth/token
+    resource:
+      userInfoUri: http://localhost:9005/user
     authorization:
-      check-token-access: http://localhost:8080/oauth/check_token
-    basic:
-      enabled: false
-boot:
-  oauth:
-    token-store-type: jdbc
-    token-signing-key: 123123
-spring:
-    resources:
-      static-locations: classpath:/view
-    thymeleaf:
-        prefix: classpath:/view/
-    datasource:
-        type: com.alibaba.druid.pool.DruidDataSource
-        driverClassName: com.mysql.jdbc.Driver
-        druid:
-            first:  #数据源1
-                url: jdbc:mysql://localhost:3306/oauth?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&&autoReconnect=true&failOverReadOnly=false
-                username: root
-                password: root
-            second:  #数据源2
-                url: jdbc:mysql://localhost:3306/oauth?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&&autoReconnect=true&failOverReadOnly=false
-                username: root
-                password: root
-            initial-size: 10
-            max-active: 100
-            min-idle: 10
-            max-wait: 60000
-            pool-prepared-statements: true
-            max-pool-prepared-statement-per-connection-size: 20
-            time-between-eviction-runs-millis: 60000
-            min-evictable-idle-time-millis: 300000
-            validation-query: SELECT 1 FROM DUAL
-            test-while-idle: true
-            test-on-borrow: false
-            test-on-return: false
-            stat-view-servlet:
-                enabled: true
-                url-pattern: /druid/*
-                #login-username: admin
-                #login-password: admin
-            filter:
-                stat:
-                    log-slow-sql: true
-                    slow-sql-millis: 1000
-                    merge-sql: true
-                wall:
-                    config:
-                        multi-statement-allow: true
-# 验证token的接口
-#      user-info-uri: ${auth-server}/user # 一个可以获取认证授权的自定义接口，可以在授权服务器，也可以在其他服务器上
-#      prefer-token-info: true # 如果同时配置了token-info-uri 和 user-info-uri，这个现象设置使用哪个取验证授权
-
+      check-token-access: http://localhost:8080/auth/oauth/check_token
+  basic:
+    enabled: false

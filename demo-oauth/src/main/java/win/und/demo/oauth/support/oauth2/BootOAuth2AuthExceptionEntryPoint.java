@@ -1,5 +1,7 @@
 package win.und.demo.oauth.support.oauth2;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
@@ -19,8 +21,14 @@ import java.io.IOException;
  */
 @Component
 public class BootOAuth2AuthExceptionEntryPoint extends OAuth2AuthenticationEntryPoint {
+//    private Logger log = LoggerFactory.getLogger(getClass());
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
+        logger.info(" ====================================================== ");
+        logger.info("请求url：" +request.getRequestURI());
+        logger.info("  ============ 身份认证失败..................... ");
+        logger.info(e.getMessage());
+        logger.info(e.getLocalizedMessage());
         HttpUtils.writerError(HttpResponse.baseResponse(HttpStatus.UNAUTHORIZED.value(),e.getMessage()),response);
     }
 

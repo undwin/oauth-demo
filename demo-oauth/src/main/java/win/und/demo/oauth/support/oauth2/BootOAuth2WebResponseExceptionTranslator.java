@@ -22,7 +22,7 @@ import java.io.IOException;
  *
  */
 @Component("bootWebResponseExceptionTranslator")
-public class BootOAuth2WebResponseExceptionTranslator implements WebResponseExceptionTranslator<OAuth2Exception> {
+public class BootOAuth2WebResponseExceptionTranslator implements WebResponseExceptionTranslator {
 
     private ThrowableAnalyzer throwableAnalyzer = new DefaultThrowableAnalyzer();
 
